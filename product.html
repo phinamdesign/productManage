@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Quản lý sản phẩm</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="panel　panel-primary">
+    <div class="panel-heading">
+        Nhập thông tin sản phẩm
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="nameProduct">Tên sản phẩm</label>
+            <input type="text" id="nameProduct" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="amountt">Số lượng</label>
+            <input type="text" id="amountt" class="form-control">
+        </div>
+        <button id="btn_register" class="btn btn-success" onclick="add()">Thêm sản phẩm</button>
+    </div>
+    <div class="panel-heading">
+        Thông tin sản phẩm
+    </div>
+    <div class="panel-body">
+        <table class="table table-primary">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th width="80px">Sửa</th>
+                <th width="80px">Xóa</th>
+
+            </tr>
+            </thead>
+            <tbody id="detaList">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    var dataList = [];
+    function add() {
+        var nameProduct = document.getElementById("nameProduct").value;
+        var amountt = document.getElementById("amountt").value;
+        var product = {
+            "nameProduct" : nameProduct,
+            "amountt" : amountt,
+        };
+        if (curIndex == -1){
+            addTag(product);
+        }else {
+            dataList[curIndex] = product;
+            curIndex = -1;
+            document.getElementById("btn_register").innerHTML = "Thêm sản phẩm";
+            displayAll();
+        }
+    }
+    function displayAll() {
+        detaList.innerHTML = "";
+        for (i=0;i<dataList.length;i++){
+            var product = dataList[i];
+
+            detaList.innerHTML += "<tr>"+
+                "<td>"+(i+1)+"</td>"+
+                "<td>"+product.nameProduct+"</td>"+
+                "<td>"+product.amountt+"</td>"+
+                "<td><button class='btn btn-success' onclick='edit("+i+")'>Sửa</button></td>"+
+                "<td><button class='btn btn-danger' onclick='onProductDelete("+i+")'>Xóa</button></td>"+
+                "</tr>"
+        }
+    }
+    function addTag(product) {
+        dataList.push(product);
+        console.log(dataList.length);
+        var detaList = document.getElementById("detaList");
+        detaList.innerHTML += "<tr>"+
+            "<td>"+dataList.length+"</td>"+
+            "<td>"+product.nameProduct+"</td>"+
+            "<td>"+product.amountt+"</td>"+
+            "<td><button class='btn btn-success' onclick='edit("+(dataList.length - 1)+")'>Sửa</button></td>"+
+            "<td><button class='btn btn-danger' onclick=' onProductDelete()'>Xóa</button></td>"+
+            "</tr>"
+    }
+    var curIndex = -1;
+    function edit(index) {
+        curIndex = index;
+        var  product = dataList[index];
+        document.getElementById("nameProduct").value = product.nameProduct;
+        document.getElementById("amountt").value = product.amountt;
+        document.getElementById("btn_register").innerHTML = "Cập nhật";
+    }
+
+    function onProductDelete() {
+        if (confirm("Bạn chắc chắn muốn xóa ??")){
+            productDelete();
+            displayAll();
+        }
+    }
+    function productDelete(index) {
+        dataList.splice(index,1);
+    }
+</script>
+</body>
+</html>
